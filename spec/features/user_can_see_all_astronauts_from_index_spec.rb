@@ -29,5 +29,26 @@ describe 'visiting /astronauts' do
 
       expect(page).to have_content("Average Age: #{expected}")
     end
+    it 'should list the space missions for each astronaut in alphabetical order' do
+      Astronaut.destroy_all
+      astronaut_1 = Astronaut.create!(name: 'Louis', age: 30, job: 'astronaut, of course')
+      astronaut_2 = Astronaut.create!(name: 'Ben', age: 90, job: 'starflight commander')
+      astronaut_3 = Astronaut.create!(name: 'Mark', age: 60, job: 'space rookie')
+      space_mission_1 = astronaut_1.space_missions.create!(title: 'a mission', trip_length: '10')
+      space_mission_2 = astronaut_1.space_missions.create!(title: 'b mission', trip_length: '100')
+      space_mission_3 = astronaut_2.space_missions.create!(title: 'c mission', trip_length: '10')
+      space_mission_4 = astronaut_2.space_missions.create!(title: 'd mission', trip_length: '100')
+      space_mission_5 = astronaut_3.space_missions.create!(title: 'e mission', trip_length: '100')
+      space_mission_6 = astronaut_3.space_missions.create!(title: 'f mission', trip_length: '10')
+
+      visit '/astronauts'
+
+      expect(page).to have_content("a mission")
+      expect(page).to have_content("b mission")
+      expect(page).to have_content("c mission")
+      expect(page).to have_content("d mission")
+      expect(page).to have_content("e mission")
+      expect(page).to have_content("f mission")
+    end
   end
 end
